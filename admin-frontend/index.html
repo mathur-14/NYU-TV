@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stream Access Requests</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #f2f2f2;
+    }
+    
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    .actionCell {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .tick, .cross {
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .tick {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    .tick:hover {
+      background-color: #45a049;
+    }
+    
+    .cross {
+      background-color: #f44336;
+      color: white;
+    }
+    
+    .cross:hover {
+      background-color: #da190b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stream Access Requests</h1>
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Email</th>
+          <th>Reason</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Fetch the JSON data from the URL
+    fetch('https://b7oc55il6b.execute-api.us-east-1.amazonaws.com/dev/admin/stream-access-requests')
+      .then(response => response.json())
+      .then(data => {
+        // Get the table body element
+        const tableBody = document.querySelector('#dataTable tbody');
+
+        // Loop through the data and create table rows
+        data.results.forEach(item => {
+          const row = document.createElement('tr');
+
+          // Create cells for each data item
+          const useridCell = document.createElement('td');
+          useridCell.textContent = item.userid;
+          row.appendChild(useridCell);
+
+          const emailCell = document.createElement('td');
+          emailCell.textContent = item.email;
+          row.appendChild(emailCell);
+
+          const reasonCell = document.createElement('td');
+          reasonCell.textContent = item.reason;
+          row.appendChild(reasonCell);
+
+          // Create action cells with tick and cross buttons
+          const actionCell = document.createElement('td');
+          actionCell.className = 'actionCell';
+
+          const tickButton = document.createElement('span');
+          tickButton.className = 'tick';
+          tickButton.textContent = 'Approve';
+          tickButton.addEventListener('click', () => handleAction(item.email, 1));
+          actionCell.appendChild(tickButton);
+
+          const crossButton = document.createElement('span');
+          crossButton.className = 'cross';
+          crossButton.textContent = 'Deny';
+          crossButton.addEventListener('click', () => handleAction(item.email, 0));
+          actionCell.appendChild(crossButton);
+
+          row.appendChild(actionCell);
+
+          // Append the row to the table body
+          tableBody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+
+    function handleAction(email, permission) {
+      const url = 'https://b7oc55il6b.execute-api.us-east-1.amazonaws.com/dev/admin/request-action';
+
+      const data = {
+        email: email,
+        permission: permission
+      };
+      console.log(data)
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Action successful:', data);
+        })
+        .catch(error => {
+          console.error('Error sending action:', error);
+        });
+    }
+  </script>
+</body>
+</html>

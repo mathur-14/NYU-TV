@@ -9,3 +9,9 @@
 - Low-latency viewing experience for Nyu subscribers.
 - Utilizes AWS services for reliable and scalable backend infrastructure.
 - Serverless architecture for efficient resource management and maintenance.
+
+## Admin frontend
+
+- Allows the admin to view all the requests from users to create a channel
+- Allows the admin to approve/deny an individual from creating a channel
+    - Calls AWS lambdas to fetch and update channel creation requests
