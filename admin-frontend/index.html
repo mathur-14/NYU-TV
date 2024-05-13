@@ -70,7 +70,6 @@
     <table id="dataTable">
       <thead>
         <tr>
-          <th>User ID</th>
           <th>Email</th>
           <th>Reason</th>
           <th>Action</th>
@@ -92,11 +91,6 @@
         data.results.forEach(item => {
           const row = document.createElement('tr');
 
-          // Create cells for each data item
-          const useridCell = document.createElement('td');
-          useridCell.textContent = item.userid;
-          row.appendChild(useridCell);
-
           const emailCell = document.createElement('td');
           emailCell.textContent = item.email;
           row.appendChild(emailCell);
@@ -112,13 +106,13 @@
           const tickButton = document.createElement('span');
           tickButton.className = 'tick';
           tickButton.textContent = 'Approve';
-          tickButton.addEventListener('click', () => handleAction(item.email, 1));
+          tickButton.addEventListener('click', () => handleAction(item.email, item.reason, 1));
           actionCell.appendChild(tickButton);
 
           const crossButton = document.createElement('span');
           crossButton.className = 'cross';
           crossButton.textContent = 'Deny';
-          crossButton.addEventListener('click', () => handleAction(item.email, 0));
+          crossButton.addEventListener('click', () => handleAction(item.email, item.reason, 0));
           actionCell.appendChild(crossButton);
 
           row.appendChild(actionCell);
@@ -131,12 +125,13 @@
         console.error('Error fetching data:', error);
       });
 
-    function handleAction(email, permission) {
+    function handleAction(email, channel, permission) {
       const url = 'https://b7oc55il6b.execute-api.us-east-1.amazonaws.com/dev/admin/request-action';
 
       const data = {
         email: email,
-        permission: permission
+        permission: permission,
+        reason: channel
       };
       console.log(data)
       fetch(url, {
