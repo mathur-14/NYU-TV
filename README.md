@@ -1,5 +1,14 @@
 # Nyu-tv Cloud Project
 
+## Contributors
+
+This project was made possible by the contributions of the following individuals:
+
+- Yash Mathur ([@mathur-14](https://github.com/mathur-14))
+- Abhishek Mahajan ([@abhishekmahajan98](https://github.com/abhishekmahajan98))
+- Madhuri Mahalingam ([@madhurimaha](https://github.com/madhurimaha))
+- Yashaswi Makula ([@yashaswi2000](https://github.com/yashaswi2000))
+
 **"Nyu-tv"** is a cloud-based project designed for individuals within Nyu to facilitate stream access requests, scheduling, and live streaming. Users can request stream access for their channels, allowing others from Nyu to subscribe and view streams with minimal latency. Leveraging AWS resources, the backend of this project is hosted serverlessly for efficient scalability and maintenance.
 
 ## Key Features:
